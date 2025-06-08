@@ -1,18 +1,28 @@
-tf-nightly==2.20.0.dev20250307
-numpy==1.26.0
-ml-dtypes==0.5.1
-grpcio-status==1.48.2
-fastapi
-uvicorn
-openai
-tiktoken
-python-multipart
-pdfplumber
-pytesseract
-opencv-python-headless==4.10.0.84
-pillow==10.0.1
-chromadb
-protobuf==4.25.0
-tenacity==8.2.3
-matplotlib==3.5.3
-ydata-profiling==4.16.1
+keras==2.13.1
+sentence-transformers
+typing-extensions==4.14.0
+torch==2.2.1
+sentence-transformers==2.5.1
+chromadb==0.4.24
+openai==1.14.3
+fastapi==0.115.0
+pydantic==2.11.1
+
+# tf-nightly==2.20.0.dev20250307
+# numpy==1.26.0
+# ml-dtypes==0.5.1
+# grpcio-status==1.48.2
+# fastapi
+# uvicorn
+# openai
+# tiktoken
+# python-multipart
+# pdfplumber
+# pytesseract
+# opencv-python-headless==4.10.0.84
+# pillow==10.0.1
+# chromadb
+# protobuf==4.25.0
+# tenacity==8.2.3 
+# matplotlib==3.5.3
+# ydata-profiling==4.16.1
