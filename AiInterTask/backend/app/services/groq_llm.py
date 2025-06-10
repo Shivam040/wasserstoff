@@ -9,34 +9,62 @@ client = OpenAI(
 
 def get_answer_and_themes(query: str, contexts: list[str]) -> dict:
     context_text = "\n".join(f"- {c}" for c in contexts)
+    prompt = f"""You are a document summarizer.
 
-    prompt = f"""You are a legal document assistant.
+            Given the document excerpts and the user's question, return:
 
-            Given the following document excerpts and the user's question, do two things:
+            1. A well-structured answer to the question.
+            2. A list of themes. For each theme:
+            - theme name
+            - a short description
+            - list of document IDs that support it
 
-            1. Provide a well-structured answer to the question.
-            2. Identify and list any common themes across these document excerpts. For each theme, include a list of supporting document IDs or descriptions.
+            📌 Return your response in strict JSON format:
+            {{
+            "synthesized_answer": "string",
+            "themes": [
+                {{
+                "theme": "string",
+                "supporting_docs": ["DOC001", "DOC002"]
+                }}
+            ]
+            }}
 
             Document Excerpts:
             {context_text}
 
             Question: {query}
-
-            Return your response in JSON format like this:
-            {{
-            "synthesized_answer": "...",
-            "themes": [
-                {{
-                "theme": "Theme description here",
-                "supporting_docs": ["DOC001", "DOC002"]
-                }},
-                ...
-            ]
-            }}
             """
+
+
+    # prompt = f"""You are a legal document assistant.
+
+    #         Given the following document excerpts and the user's question, do two things:
+
+    #         1. Provide a well-structured answer to the question.
+    #         2. Identify and list any common themes across these document excerpts. For each theme, include a list of supporting document IDs or descriptions.
+
+    #         Document Excerpts:
+    #         {context_text}
+
+    #         Question: {query}
+
+    #         Return your response in JSON format like this:
+    #         {{
+    #         "synthesized_answer": "...",
+    #         "themes": [
+    #             {{
+    #             "theme": "Theme description here",
+    #             "supporting_docs": ["DOC001", "DOC002"]
+    #             }},
+    #             ...
+    #         ]
+    #         }}
+    #         """
 
     response = client.chat.completions.create(
         model="llama3-70b-8192",
+        temperature=0.3,
         messages=[
             {"role": "system", "content": "You are an expert document summarizer."},
             {"role": "user", "content": prompt}

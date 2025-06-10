@@ -1,5 +1,7 @@
 import streamlit as st
 import requests
+import pandas as pd
+
 
 API_URL = "http://127.0.0.1:8000"
 
@@ -54,67 +56,36 @@ if st.button("Get Answer"):
             if response.status_code == 200:
                 result = response.json()
 
-                # st.subheader("🧠 Synthesized Answer")
-                # st.markdown(result.get("synthesized_answer", "_No answer returned._"))
 
-                st.subheader("📄 Individual Document Answers")
                 answers = result.get("individual_answers", [])
                 if answers:
-                    for ans in answers:
-                        st.markdown(f"**{ans['doc_id']}** - {ans['citation']}")
-                        st.write(ans['answer'])
-                        st.markdown("---")
+                    st.subheader("📄 Individual Document Answers (Tabular View)")
+                    
+                    # Build a DataFrame for clean table
+                    df = pd.DataFrame([
+                        {
+                            "Document ID": ans["doc_id"],
+                            "Extracted Answer": ans["answer"],
+                            "Citation": ans["citation"]
+                        }
+                        for ans in answers
+                    ])
+
+                    st.table(df)
                 else:
                     st.write("_No document answers returned._")
 
-                st.subheader("🔎 Identified Themes")
+
                 themes = result.get("themes", [])
                 if themes:
-                    for t in themes:
-                        st.markdown(f"**Theme**: {t['theme']}")
-                        st.write("Supporting Docs:", ", ".join(t['supporting_docs']))
+                    st.subheader("🧠 Synthesized Themes (Chat Format)")
+                    for i, t in enumerate(themes, start=1):
+                        st.markdown(f"**Theme {i} – {t['theme']}:**")
+                        st.markdown(", ".join(t['supporting_docs']))
                         st.markdown("---")
                 else:
                     st.write("_No themes identified._")
 
+
             else:
                 st.error("Something went wrong. Check backend logs.")
-
-
-# import streamlit as st
-# import requests
-
-# st.set_page_config(page_title="Wasserstoff LLM", layout="wide")
-
-# st.title("📄 Document Q&A + Theme Extractor")
-
-# query = st.text_input("Enter your query:")
-
-# if st.button("Submit Query") and query:
-#     with st.spinner("Querying backend..."):
-#         response = requests.post(
-#             "http://localhost:8000/query/",
-#             data={"query": query}  # because FastAPI expects `Form(...)`
-#         )
-
-#         if response.status_code == 200:
-#             data = response.json()
-
-#             st.subheader("🧠 Synthesized Answer")
-#             st.markdown(data["synthesized_answer"])
-
-#             st.subheader("📚 Individual Document Answers")
-#             for ans in data["individual_answers"]:
-#                 st.markdown(f"**Doc ID**: {ans['doc_id']}")
-#                 st.markdown(f"**Answer**: {ans['answer']}")
-#                 st.markdown(f"**Citation**: {ans['citation']}")
-#                 st.markdown("---")
-
-#             st.subheader("🎯 Themes")
-#             for theme in data["themes"]:
-#                 st.markdown(f"**Theme**: {theme['theme']}")
-#                 st.markdown(f"**Supporting Docs**: {', '.join(theme['supporting_docs'])}")
-#                 st.markdown("---")
-
-#         else:
-#             st.error("Failed to fetch response from the backend.")

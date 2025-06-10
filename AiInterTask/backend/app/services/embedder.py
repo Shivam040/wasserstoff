@@ -1,16 +1,7 @@
 import os
-# from dotenv import load_dotenv
 from uuid import uuid4
 import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
-
-# load_dotenv()
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-# embedder = OpenAIEmbeddingFunction(
-#     api_key=OPENAI_API_KEY,
-#     model_name="text-embedding-ada-002"
-# )
 
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
@@ -22,11 +13,6 @@ collection = client.get_or_create_collection(
     embedding_function=model
 )
 
-# client = chromadb.Client()
-# collection = client.get_or_create_collection(
-#     name="docs",
-#     embedding_function=embedder  # ✅ attach here instead
-# )
 
 def add_to_vectorstore(text_chunks: list[str], metadatas: list[dict]):
     ids = [str(uuid4()) for _ in text_chunks]
