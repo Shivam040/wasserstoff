@@ -1,4 +1,3 @@
-import os
 from uuid import uuid4
 import chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction

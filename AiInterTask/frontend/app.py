@@ -59,7 +59,7 @@ if st.button("Get Answer"):
 
                 answers = result.get("individual_answers", [])
                 if answers:
-                    st.subheader("📄 Individual Document Answers (Tabular View)")
+                    st.subheader("📄 Document Answers (Tabular View)")
                     
                     # Build a DataFrame for clean table
                     df = pd.DataFrame([
@@ -78,10 +78,10 @@ if st.button("Get Answer"):
 
                 themes = result.get("themes", [])
                 if themes:
-                    st.subheader("🧠 Synthesized Themes (Chat Format)")
+                    st.subheader("🧠 Synthesized Themes")
                     for i, t in enumerate(themes, start=1):
                         st.markdown(f"**Theme {i} – {t['theme']}:**")
-                        st.markdown(", ".join(t['supporting_docs']))
+                        st.markdown(f"{t['supporting_docs']}: {t['description']}")
                         st.markdown("---")
                 else:
                     st.write("_No themes identified._")

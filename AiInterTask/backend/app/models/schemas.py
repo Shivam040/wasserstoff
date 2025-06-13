@@ -15,6 +15,7 @@ class DocumentAnswer(BaseModel):
 
 class ThemeSummary(BaseModel):
     theme: str
+    description: str
     supporting_docs: List[str]  # e.g., ["DOC001", "DOC005"]
 
 class QueryResponse(BaseModel):

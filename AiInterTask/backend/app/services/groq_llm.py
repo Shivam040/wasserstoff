@@ -7,60 +7,17 @@ client = OpenAI(
     api_key=GROQ_API_KEY
 )
 
-def get_answer_and_themes(query: str, contexts: list[str]) -> dict:
+
+def get_synthesized_answer(query: str, contexts: list[str]) -> dict:
     context_text = "\n".join(f"- {c}" for c in contexts)
-    prompt = f"""You are a document summarizer.
-
-            Given the document excerpts and the user's question, return:
-
-            1. A well-structured answer to the question.
-            2. A list of themes. For each theme:
-            - theme name
-            - a short description
-            - list of document IDs that support it
-
-            📌 Return your response in strict JSON format:
-            {{
-            "synthesized_answer": "string",
-            "themes": [
-                {{
-                "theme": "string",
-                "supporting_docs": ["DOC001", "DOC002"]
-                }}
-            ]
-            }}
-
-            Document Excerpts:
-            {context_text}
-
-            Question: {query}
-            """
-
-
-    # prompt = f"""You are a legal document assistant.
-
-    #         Given the following document excerpts and the user's question, do two things:
-
-    #         1. Provide a well-structured answer to the question.
-    #         2. Identify and list any common themes across these document excerpts. For each theme, include a list of supporting document IDs or descriptions.
-
-    #         Document Excerpts:
-    #         {context_text}
-
-    #         Question: {query}
-
-    #         Return your response in JSON format like this:
-    #         {{
-    #         "synthesized_answer": "...",
-    #         "themes": [
-    #             {{
-    #             "theme": "Theme description here",
-    #             "supporting_docs": ["DOC001", "DOC002"]
-    #             }},
-    #             ...
-    #         ]
-    #         }}
-    #         """
+    prompt = f"""You are a document summarizer. 
+    Given the excerpts below and the question, return a concise answer in JSON:
+    {{ "synthesized_answer": "..." }}
+    
+    Excerpts:
+    {context_text}
+    Question: {query}
+    """
 
     response = client.chat.completions.create(
         model="llama3-70b-8192",
@@ -70,12 +27,35 @@ def get_answer_and_themes(query: str, contexts: list[str]) -> dict:
             {"role": "user", "content": prompt}
         ]
     )
+    return json.loads(response.choices[0].message.content)
 
-    # Parse string to dict
-    content = response.choices[0].message.content
-    try:
-        return json.loads(content)
-    except Exception as e:
-        print("LLM returned invalid JSON:", content)
-        return {"synthesized_answer": content, "themes": []}
 
+def get_themes(query: str, contexts: list[str]) -> dict:
+    context_text = "\n".join(f"- {c}" for c in contexts)
+    prompt = f"""You are a theme extractor. 
+    Given the document excerpts, extract key themes and a sentence related to that theme and their supporting docs in JSON, only this no other text:
+    
+    {{
+      "themes": [
+        {{
+          "theme": "string",
+          "individual_answers": "string",
+          "supporting_docs": ["DOC001"]
+        }}
+      ]
+    }}
+    
+    Excerpts:
+    {context_text}
+    Question: {query}
+    """
+    response = client.chat.completions.create(
+        model="llama3-70b-8192",
+        temperature=0.3,
+        messages=[
+            {"role": "system", "content": "You are an expert theme extractor."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    print("LLM Output:", response.choices[0].message.content)
+    return json.loads(response.choices[0].message.content)

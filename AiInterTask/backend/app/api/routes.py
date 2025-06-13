@@ -1,10 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from typing import List
-# from app.services.extractor import extract_text_from_file
 from app.services.extractor import extract_text_with_metadata
 from app.services.embedder import add_to_vectorstore, query_vectorstore
 from app.models.schemas import QueryRequest, QueryResponse, DocumentAnswer, ThemeSummary
-from app.services.groq_llm import get_answer_and_themes
+from app.services.groq_llm import get_synthesized_answer, get_themes
 import os
 
 router = APIRouter()
@@ -20,7 +19,7 @@ async def upload(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         f.write(await file.read())
 
-    # ⬇️ Extract with paragraph + page metadata
+    # Extract with paragraph + page metadata
     extracted_paragraphs = extract_text_with_metadata(file_path)
 
     # Create text chunks and metadata
@@ -63,7 +62,8 @@ async def query_route(query: str = Form(...), selected_docs: List[str] = Form(..
 
     # Step 4: Prepare context for LLaMA
     contexts = [chunk["text"] for chunk in unique_chunks]
-    result = get_answer_and_themes(query, contexts)
+    result = get_synthesized_answer(query, contexts)
+    themes_result = get_themes(query, contexts)
 
     # Step 5: Build document answers list
     individual_answers = [
@@ -79,9 +79,10 @@ async def query_route(query: str = Form(...), selected_docs: List[str] = Form(..
     themes = [
         ThemeSummary(
             theme=t["theme"],
+            description=t["individual_answers"],
             supporting_docs=list(set(t["supporting_docs"]))  # remove any duplicates here too
         )
-        for t in result.get("themes", [])
+        for t in themes_result.get("themes", [])
     ]
 
     return QueryResponse(
