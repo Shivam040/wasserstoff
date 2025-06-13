@@ -57,5 +57,4 @@ def get_themes(query: str, contexts: list[str]) -> dict:
             {"role": "user", "content": prompt}
         ]
     )
-    print("LLM Output:", response.choices[0].message.content)
     return json.loads(response.choices[0].message.content)

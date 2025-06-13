@@ -2,16 +2,16 @@ from fastapi import APIRouter, UploadFile, File, Form
 from typing import List
 from app.services.extractor import extract_text_with_metadata
 from app.services.embedder import add_to_vectorstore, query_vectorstore
-from app.models.schemas import QueryRequest, QueryResponse, DocumentAnswer, ThemeSummary
+from app.models.schemas import QueryResponse, DocumentAnswer, ThemeSummary
 from app.services.groq_llm import get_synthesized_answer, get_themes
 import os
 
 router = APIRouter()
 uploaded_files_set = set()
 
-
 @router.post("/upload/")
 async def upload(file: UploadFile = File(...)):
+    
     UPLOAD_DIR = "data"
     os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -69,7 +69,7 @@ async def query_route(query: str = Form(...), selected_docs: List[str] = Form(..
     individual_answers = [
         DocumentAnswer(
             doc_id=chunk["metadata"].get("doc_id", f"DOC{i+1}"),
-            answer=chunk["text"],
+            answer = chunk["text"],
             citation=chunk["metadata"].get("citation", f"Chunk {i}")
         )
         for i, chunk in enumerate(unique_chunks)
