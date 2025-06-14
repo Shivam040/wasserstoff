@@ -3,20 +3,20 @@ services:
     name: genai-backend
     env: docker
     plan: free
-    repo: https://github.com/Shivam040/wasserstoff
     region: oregon
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: AiInterTask/backend/Dockerfile
     envVars:
-      - key: BACKEND_URL
-        value: http://genai-backend:8000
+      - key: PORT
+        value: 8000
 
   - type: web
     name: genai-frontend
     env: docker
     plan: free
-    repo: https://github.com/Shivam040/wasserstoff
     region: oregon
-    dockerfilePath: frontend/Dockerfile
+    dockerfilePath: AiInterTask/frontend/Dockerfile
     envVars:
       - key: BACKEND_URL
         value: https://genai-backend.onrender.com
+      - key: PORT
+        value: 8501
