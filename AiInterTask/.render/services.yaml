@@ -5,6 +5,7 @@ services:
     plan: free
     region: oregon
     dockerfilePath: AiInterTask/backend/Dockerfile
+    contextPath: AiInterTask/backend
     envVars:
       - key: PORT
         value: 8000
@@ -15,6 +16,7 @@ services:
     plan: free
     region: oregon
     dockerfilePath: AiInterTask/frontend/Dockerfile
+    contextPath: AiInterTask/frontend
     envVars:
       - key: BACKEND_URL
         value: https://genai-backend.onrender.com
