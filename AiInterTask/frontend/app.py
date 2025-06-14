@@ -6,11 +6,11 @@ import re
 import os
 API_URL = os.getenv("BACKEND_URL", "https://wasserstoff-5-sv55.onrender.com")
 
-
+# Configure the Streamlit page title and layout
 st.set_page_config(page_title="Gen-AI Chatbot", layout="wide")
 st.title("📚 Document Theme Identifier Chatbot")
 
-# File Upload Setup 
+# Track uploaded docs in session state
 if "uploaded_docs" not in st.session_state:
     st.session_state.uploaded_docs = set()
 
@@ -38,19 +38,20 @@ if uploaded_file:
 st.markdown("---")
 
 query = st.text_input("🔍 Ask a question about the documents")
-
+# Document Selection
 st.subheader("📂 Select documents to include in query")
 
 # Display checkboxes for all uploaded documents, defaulting to checked.
 if not st.session_state.uploaded_docs:
     st.info("Upload some documents first.")
 else:
+    # Show a checkbox for each uploaded document
     selected_files = []
     for doc in sorted(st.session_state.uploaded_docs):
         if st.checkbox(doc, value=True):
             selected_files.append(doc)
 
-
+# Query Submission and Answer Display
 if st.button("Get Answer"):
     if not query.strip():
         st.warning("Please enter a question.")
@@ -62,6 +63,7 @@ if st.button("Get Answer"):
                 f"{API_URL}/query/",
                 data={"query": query, "selected_docs": selected_files}
             )
+            # Display Document Answers
             if response.status_code == 200:
                 result = response.json()
 
@@ -79,6 +81,7 @@ if st.button("Get Answer"):
                         }
                         for ans in answers
                     ])
+                    # Style the table
                     styled_df = df.style.set_table_styles([
                         {'selector': 'th', 'props': [('text-align', 'left')]},
                         {'selector': 'td', 'props': [('text-align', 'left'), ('max-width', '250px')]},  # All cells
@@ -93,6 +96,7 @@ if st.button("Get Answer"):
                     st.write("_No document answers returned._")
 
 
+                # Display Themes
                 themes = result.get("themes", [])
                 if themes:
                     st.subheader("🧠 Synthesized Themes")
