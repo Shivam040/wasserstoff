@@ -12,7 +12,7 @@ A full-stack Gen-AI-powered web application that allows users to upload document
 
 ---
 
-## 🔁 Workflow
+## Workflow
 
 ### 1. Document Ingestion
 - Users upload PDFs/images via Streamlit frontend
@@ -57,29 +57,30 @@ A full-stack Gen-AI-powered web application that allows users to upload document
 ## Project Structure
 
 wasserstoff/
-├── AiInterTask/
-│   ├── backend/
-│   │   ├── app/
-│   │   │   ├── __init__.py
-│   │   │   ├── main.py                  # FastAPI entrypoint
-│   │   │   ├── api/
-│   │   │   │   └── routes.py            # API endpoints
-│   │   │   ├── models/
-│   │   │   │   └── schemas.py           # Pydantic models
-│   │   │   ├── services/
-│   │   │   │   ├── extractor.py         # Text extraction (PDF, OCR, TXT)
-│   │   │   │   ├── embedder.py          # ChromaDB setup, vector search
-│   │   │   │   └── groq_llm.py          # LLaMA3-based LLM interactions
-│   │   ├── Dockerfile                   # Docker config for backend
-│   │   └── requirements.txt
-│   │
-│   ├── frontend/
-│   │   ├── app.py                       # Streamlit frontend
-│   │   └── requirements.txt
-│
-├── docker-compose.yml                  # Compose for frontend + backend
-├── .env                                # Environment variables
-└── README.md                           # ← (This file)
+└── AiInterTask/
+    ├── backend/
+    │   ├── app/
+    │   │   ├── __init__.py
+    │   │   ├── main.py             # FastAPI entrypoint
+    │   │   ├── api/
+    │   │   │   └── routes.py       # API endpoints
+    │   │   ├── models/
+    │   │   │   └── schemas.py      # Pydantic models
+    │   │   ├── services/
+    │   │   │   ├── extractor.py    # Text extraction (PDF, OCR, TXT)
+    │   │   │   ├── embedder.py     # ChromaDB setup, vector search
+    │   │   │   └── groq_llm.py     # LLaMA3-based LLM interactions
+    │   ├── Dockerfile              # Docker config for backend
+    │   └── requirements.txt
+    │
+    ├── frontend/
+    │   ├── app.py                  # Streamlit frontend
+    │   └── requirements.txt
+    │
+    ├── docker-compose.yml          # Compose for frontend + backend
+    ├── .env                        # Environment variables
+    └── README.md                   # ← (This file)
+
 
 
 ## Running the Project
