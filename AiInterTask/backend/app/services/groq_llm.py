@@ -17,6 +17,19 @@ client = OpenAI(
 
 
 def get_synthesized_answer(query: str, contexts: list[str]) -> dict:
+    """
+    Generates a synthesized answer to the user's query by using the provided
+    document excerpts as context.
+
+    Parameters:
+    - query (str): The user's input question or query.
+    - contexts (list[str]): A list of relevant document excerpts (text chunks).
+
+    Returns:
+    - dict: A dictionary in the format { "synthesized_answer": "..." }
+            containing the concise synthesized response from the model.
+    """
+    
     context_text = "\n".join(f"- {c}" for c in contexts)
     prompt = f"""You are a document summarizer. 
     Given the excerpts below and the question, return a concise answer in JSON:
@@ -39,6 +52,27 @@ def get_synthesized_answer(query: str, contexts: list[str]) -> dict:
 
 
 def get_themes(query: str, contexts: list[str]) -> dict:
+    """
+    Extracts key themes from the provided document excerpts in relation to the user's query.
+
+    Parameters:
+    - query (str): The user's input question or topic.
+    - contexts (list[str]): A list of relevant document excerpts (text chunks).
+
+    Returns:
+    - dict: A dictionary in the following format:
+        {
+            "themes": [
+                {
+                    "theme": "string",
+                    "individual_answers": "string",
+                    "supporting_docs": ["DOC001"]
+                }
+            ]
+        }
+      Each theme represents a major idea, a supporting sentence, and the documents it came from.
+    """
+    
     context_text = "\n".join(f"- {c}" for c in contexts)
     prompt = f"""You are a theme extractor. 
     Given the document excerpts, extract key themes and a sentence related to that theme and their supporting docs in JSON, only this no other text:
