@@ -11,8 +11,6 @@ router = APIRouter()
 uploaded_files_set = set()
 
 # Defines an POST API endpoint at /upload/, it expects a file to be uploaded via multipart form-data.
-
-Expects a file to be uploaded via multipart form-data.
 @router.post("/upload/")
 async def upload(file: UploadFile = File(...)):
     # Creates the directory if it doesn't exist.
