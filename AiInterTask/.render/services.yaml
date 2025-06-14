@@ -4,7 +4,7 @@ services:
     env: docker
     plan: free
     region: oregon
-    dockerfilePath: AiInterTask/backend/Dockerfile
+    dockerfilePath: Dockerfile
     contextPath: AiInterTask/backend
     envVars:
       - key: PORT
@@ -15,7 +15,7 @@ services:
     env: docker
     plan: free
     region: oregon
-    dockerfilePath: AiInterTask/frontend/Dockerfile
+    dockerfilePath: Dockerfile
     contextPath: AiInterTask/frontend
     envVars:
       - key: BACKEND_URL
