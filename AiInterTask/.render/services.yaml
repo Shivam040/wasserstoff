@@ -19,6 +19,6 @@ services:
     contextPath: AiInterTask/frontend
     envVars:
       - key: BACKEND_URL
-        value: https://genai-backend.onrender.com
+        value: https://wasserstoff-5-sv55.onrender.com/
       - key: PORT
         value: 8501

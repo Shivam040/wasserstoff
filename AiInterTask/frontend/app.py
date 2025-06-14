@@ -4,7 +4,7 @@ import pandas as pd
 import re
 
 import os
-API_URL = os.getenv("BACKEND_URL", "http://backend:8000")
+API_URL = os.getenv("BACKEND_URL", "https://wasserstoff-5-sv55.onrender.com")
 
 
 st.set_page_config(page_title="Gen-AI Chatbot", layout="wide")
