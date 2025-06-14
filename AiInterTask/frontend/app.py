@@ -3,18 +3,22 @@ import requests
 import pandas as pd
 import re
 
-API_URL = "http://127.0.0.1:8000"
+import os
+API_URL = os.getenv("BACKEND_URL", "http://backend:8000")
+
 
 st.set_page_config(page_title="Gen-AI Chatbot", layout="wide")
 st.title("📚 Document Theme Identifier Chatbot")
 
+# File Upload Setup
 if "uploaded_docs" not in st.session_state:
     st.session_state.uploaded_docs = set()
 
-
+# Sidebar upload widget allowing the user to upload files
 st.sidebar.title("Upload Document")
 uploaded_file = st.sidebar.file_uploader("Choose a PDF, text, or image file", type=["pdf", "txt", "jpg", "png", "jpeg"])
 
+# When a file is uploaded, it is sent as multipart form data to the /upload/ endpoint of the FastAPI backend.
 if uploaded_file:
     with st.spinner("Uploading and processing..."):
         files = {'file': (uploaded_file.name, uploaded_file, uploaded_file.type)}
@@ -33,6 +37,7 @@ query = st.text_input("🔍 Ask a question about the documents")
 
 st.subheader("📂 Select documents to include in query")
 
+# Display checkboxes for all uploaded documents, defaulting to checked.
 if not st.session_state.uploaded_docs:
     st.info("Upload some documents first.")
 else:
@@ -70,8 +75,16 @@ if st.button("Get Answer"):
                         }
                         for ans in answers
                     ])
+                    styled_df = df.style.set_table_styles([
+                        {'selector': 'th', 'props': [('text-align', 'left')]},
+                        {'selector': 'td', 'props': [('text-align', 'left'), ('max-width', '250px')]},  # All cells
+                        {'selector': 'td.col0', 'props': [('min-width', '120px')]},  # Document ID
+                        {'selector': 'td.col2', 'props': [('min-width', '120px')]},  # Citation
+                    ]).set_properties(**{
+                        'white-space': 'pre-wrap',  # Wrap long text instead of overflowing
+                    })
 
-                    st.table(df)
+                    st.dataframe(styled_df, use_container_width=True)
                 else:
                     st.write("_No document answers returned._")
 

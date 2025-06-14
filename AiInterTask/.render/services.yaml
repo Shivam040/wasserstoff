@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: genai-backend
+    env: docker
+    plan: free
+    repo: https://github.com/Shivam040/wasserstoff
+    region: oregon
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: BACKEND_URL
+        value: http://genai-backend:8000
+
+  - type: web
+    name: genai-frontend
+    env: docker
+    plan: free
+    repo: https://github.com/Shivam040/wasserstoff
+    region: oregon
+    dockerfilePath: frontend/Dockerfile
+    envVars:
+      - key: BACKEND_URL
+        value: https://genai-backend.onrender.com
