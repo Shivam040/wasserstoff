@@ -53,9 +53,9 @@ A full-stack Gen-AI-powered web application that allows users to upload document
 
 ---
 
----
 ## Project Structure
 
+```
 wasserstoff/
 └── AiInterTask/
     ├── backend/
@@ -80,7 +80,7 @@ wasserstoff/
     ├── docker-compose.yml          # Compose for frontend + backend
     ├── .env                        # Environment variables
     └── README.md                   # ← (This file)
-
+```
 
 
 ## Running the Project
