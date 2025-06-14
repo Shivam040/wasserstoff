@@ -10,7 +10,7 @@ API_URL = os.getenv("BACKEND_URL", "https://wasserstoff-5-sv55.onrender.com")
 st.set_page_config(page_title="Gen-AI Chatbot", layout="wide")
 st.title("📚 Document Theme Identifier Chatbot")
 
-# File Upload Setup
+# File Upload Setup 
 if "uploaded_docs" not in st.session_state:
     st.session_state.uploaded_docs = set()
 
@@ -28,7 +28,11 @@ if uploaded_file:
             st.session_state.uploaded_docs.add(result["filename"])
             st.sidebar.success(f"Uploaded: {result['filename']}")
         else:
-            st.sidebar.error(f"Upload failed: {response.json()}")
+            try:
+                error_details = response.json()
+            except Exception:
+                error_details = response.text
+            st.sidebar.error(f"Upload failed. Status code: {response.status_code}, Details: {error_details}")
 
 
 st.markdown("---")
