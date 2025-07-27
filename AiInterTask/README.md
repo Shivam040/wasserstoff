@@ -1,4 +1,4 @@
-# Gen-AI Document Theme Identifier Chatbot
+# Gen-AI-Multi-Document-Chat
 
 A full-stack Gen-AI-powered web application that allows users to upload documents (PDFs, images, or text), ask contextual questions, and receive synthesized answers and thematic insights using LLMs and vector search.
 
